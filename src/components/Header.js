@@ -13,8 +13,6 @@ const Header = ({
     <header className="row">
       <div className="col col-6 margin-md">
         <img src={logo} className="logo" alt="FFMedia AB"/>
-        <h1 className="h1 margin-df"></h1>
-        <h2 className="h3 margin-sm"></h2>
         <p>{invoiceDescription}</p>
       </div>
       <div className="col col-6">

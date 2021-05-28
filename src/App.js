@@ -9,7 +9,7 @@ import moment from 'moment';
 const App = () => {
   const [ invoiceTitle, setInvoiceTitle ] = useState()
   const [ invoiceNumber, setInvoiceNumber ] = useState(0)
-  const [ invoiceDate, setInvoiceDate ] = useState(moment().format('YYYY-MM-DD'))
+  const [ invoiceDate ] = useState(moment().format('YYYY-MM-DD'))
   const [ yourRef, setYourRef ] = useState()
   const [ ourRef, setOurRef ] = useState()
   const [ invoiceDescription, setInvoiceDescription ] = useState()
@@ -18,33 +18,24 @@ const App = () => {
   const [ vatAmount, setVatAmount ] = useState(1.25)
   const [ vatPrice, setVatPrice ] = useState(0)
   const [ totalPrice, setTotalPrice ] = useState(0)
-  const [ invoiceDays, setInvoiceDays ] = useState(moment().add(30, 'days').format('YYYY-MM-DD'))
+  const [ invoiceDays ] = useState(moment().add(30, 'days').format('YYYY-MM-DD'))
 
   const editRow = (row, event) => {
-		let currentSpec = specification
+    const editSpec = [...specification]
+    editSpec[row][event.name] = event.value
 
-		Object.keys(currentSpec).map((specRow) => {
-			if(specRow === row) {
-				currentSpec[row][event.name] = event.value
-			}
-		})
-    setSpecification(currentSpec)
-    return
+    setSpecification(editSpec)
 	}
 
   const addRow = () => {
-		let currentSpec = specification
-
-		currentSpec.push({
-			spec: '',
-			hours: 0,
-			price: 0,
-			vatAmount: 0,
-		})
-
-    setSpecification(currentSpec)
-    return
-	}
+    const specifications = [...specification, {
+      spec: '',
+      hours: 0,
+      price: 0,
+      vatAmount: 0,
+    }]
+    setSpecification(specifications)
+  }
 
   const updateInvoice = () => {
 
@@ -54,14 +45,13 @@ const App = () => {
 		let vat = parseFloat(vatAmount)
 
 		Object.keys(specification).map((spec) => {
-			totalExVat += parseFloat(specification[spec].hours) * parseFloat(specification[spec].price)
+			return totalExVat += parseFloat(specification[spec].hours) * parseFloat(specification[spec].price)
 		});
 
 		withVat = Math.ceil(totalExVat * vat)
 
     setVatPrice(withVat - totalExVat)
     setTotalPrice(vat === 0 ? totalExVat : withVat)
-    return
 	}
 
 	return (

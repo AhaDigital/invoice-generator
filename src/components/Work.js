@@ -8,6 +8,7 @@ const Work = ({
 	isCreditInvoice,
 	invoiceDays
 }) => {
+
 	return (
     <main className="row margin-lg">
       <table className="col col-12 margin-md">
@@ -21,7 +22,7 @@ const Work = ({
         </thead>
         <tbody>
           {
-            specification !== null ? Object.keys(specification).map((spec) => (
+            specification.length > 0 && Object.keys(specification).map((spec) => (
 
               <tr key={'spec-'+spec}>
                 <td>{specification[spec].spec}</td>
@@ -29,7 +30,7 @@ const Work = ({
                 <td>{specification[spec].price}kr</td>
                 <td>{isCreditInvoice ? '-' + parseFloat(specification[spec].price) * parseFloat(specification[spec].hours) : parseFloat(specification[spec].price) * parseFloat(specification[spec].hours)}kr</td>
               </tr>
-            )) : null
+            ))
           }
         </tbody>
         <tfoot>
