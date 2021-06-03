@@ -344,7 +344,7 @@ const App = () => {
                 vatPrice={vatPrice}
                 totalPrice={totalPrice}
                 isCreditInvoice={isCreditInvoice}
-                invoiceDays={moment(invoiceDate).add(parseInt(invoiceDays || 30), 'days').format('YYYY-MM-DD')}
+                invoiceDays={moment(invoiceDate).add(parseInt(invoiceDays || 30, 10), 'days').format('YYYY-MM-DD')}
                 invoiceDescription={invoiceDescription}
               />
               <Footer/>
