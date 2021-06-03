@@ -16,6 +16,24 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore()
 
+const stringToSlug = (str) => {
+  str = str.replace(/^\s+|\s+$/g, ''); // trim
+  str = str.toLowerCase();
+
+  // remove accents, swap ñ for n, etc
+  var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+  var to   = "aaaaeeeeiiiioooouuuunc------";
+  for (var i=0, l=from.length ; i<l ; i++) {
+      str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  }
+
+  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+      .replace(/\s+/g, '-') // collapse whitespace and replace by -
+      .replace(/-+/g, '-'); // collapse dashes
+
+  return str;
+}
+
 const Login = (email, password) => {
   firebase.auth().signInWithEmailAndPassword(email, password)
   .then((userCredential) => {
@@ -33,13 +51,49 @@ const fetchInvoiceIncNr = async () => {
   const invoiceIncNrRef = db.collection('invoiceIncNr').doc('u5FROQpVeUhBzl0CGWFC')
   let incrNr = await invoiceIncNrRef.get();
   return incrNr.data()
-  // for(const doc of incrNr.docs){
-  //   return doc.data()
-  // }
 }
 
 const saveInvoiceIncNr = (invoiceNumber) => {
   db.collection('invoiceIncNr').doc('u5FROQpVeUhBzl0CGWFC').update({incrementalNumber: invoiceNumber})
+}
+
+const fetchCompanies = async () => {
+  const snapshot = await db.collection('company').get()
+  return snapshot.docs
+}
+
+const saveNewCompany = async (yourRefName, yourRefCompany, yourRefInfo) => {
+  if(yourRefName && yourRefCompany && yourRefInfo) {
+    const companyRef = db.collection('company').doc(stringToSlug(yourRefCompany))
+    const fetchedCompany = await companyRef.get();
+  
+    if(fetchedCompany.data()) {
+      db.collection('company').doc(stringToSlug(yourRefCompany)).update({
+        name: yourRefCompany,
+        refName: yourRefName,
+        address: yourRefInfo
+      })
+      return {
+        success: true,
+        msg: `Uppdaterat ${yourRefCompany}`
+      }
+    } else {
+      db.collection('company').doc(stringToSlug(yourRefCompany)).set({
+        name: yourRefCompany,
+        refName: yourRefName,
+        address: yourRefInfo
+      })
+      return {
+        success: true,
+        msg: `Skapat ${yourRefCompany}`
+      }
+    }
+  } else {
+    return {
+      success: false,
+      msg: 'Fyll i alla fält'
+    }
+  }
 }
 
 const AuthContext = React.createContext();
@@ -59,4 +113,12 @@ const AuthContextProvider = ({ children }) => {
   return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
 }
 
-export { fetchInvoiceIncNr, AuthContextProvider, Login, AuthContext, saveInvoiceIncNr }
+export { 
+  fetchInvoiceIncNr,
+  AuthContextProvider,
+  Login,
+  saveInvoiceIncNr,
+  saveNewCompany,
+  fetchCompanies,
+  AuthContext,
+}

@@ -3,17 +3,17 @@ import logo from '../logo.svg';
 
 const Header = ({
   invoiceTitle,
-  invoiceDescription,
   invoiceNumber,
   invoiceDate,
-  yourRef,
+  yourRefName,
+  yourRefCompany,
+  yourRefInfo,
   ourRef
 }) => {
   return (
-    <header className="row">
+    <header className="row margin-lg">
       <div className="col col-6 margin-md">
         <img src={logo} className="logo" alt="FFMedia AB"/>
-        <p>{invoiceDescription}</p>
       </div>
       <div className="col col-6">
         <h1 className="h1 margin-sm">{invoiceTitle}</h1>
@@ -31,7 +31,9 @@ const Header = ({
             <h3 className="h3">Er referens:</h3>
           </div>
           <div className="col col-8">
-            <p style={{whiteSpace: 'pre-line'}}>{yourRef}</p>
+            <p style={{whiteSpace: 'pre-line'}} className="margin-sm">{yourRefName}</p>
+            <p style={{whiteSpace: 'pre-line'}}>{yourRefCompany}</p>
+            <p style={{whiteSpace: 'pre-line'}}>{yourRefInfo}</p>
           </div>
         </div>
         <div className="row margin-df">

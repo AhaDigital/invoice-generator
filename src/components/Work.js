@@ -6,12 +6,13 @@ const Work = ({
 	vatPrice,
 	totalPrice,
 	isCreditInvoice,
-	invoiceDays
+	invoiceDays,
+  invoiceDescription
 }) => {
 
 	return (
     <main className="row margin-lg">
-      <table className="col col-12 margin-md">
+      <table className="col col-12 margin-lg">
         <thead>
           <tr>
             <td>Specifikation</td>
@@ -32,6 +33,14 @@ const Work = ({
               </tr>
             ))
           }
+          {invoiceDescription && (
+            <tr>
+              <td>{invoiceDescription}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          )}
         </tbody>
         <tfoot>
           <tr>

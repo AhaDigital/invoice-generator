@@ -1,5 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { AuthContext, Login, fetchInvoiceIncNr, saveInvoiceIncNr } from './Firebase'
+import {
+  AuthContext,
+  Login,
+  fetchInvoiceIncNr,
+  saveInvoiceIncNr,
+  saveNewCompany,
+  fetchCompanies
+} from './Firebase'
 import Header from './components/Header';
 import Work from './components/Work';
 import Footer from './components/Footer';
@@ -10,9 +17,12 @@ const App = () => {
   const [ password, setPassword ] = useState()
   const [ userId, setUserId ] = useState()
   const [ invoiceTitle, setInvoiceTitle ] = useState()
+  const [ savedOrUpdatedCompany, setSavedOrUpdatedCompany ] = useState({})
   const [ invoiceNumber, setInvoiceNumber ] = useState(0)
-  const [ invoiceDate ] = useState(moment().format('YYYY-MM-DD'))
-  const [ yourRef, setYourRef ] = useState()
+  const [ invoiceDate, setInvoiceDate ] = useState(moment().format('YYYY-MM-DD'))
+  const [ yourRefName, setYourRefName ] = useState()
+  const [ yourRefCompany, setYourRefCompany ] = useState()
+  const [ yourRefInfo, setYourRefInfo ] = useState()
   const [ ourRef, setOurRef ] = useState()
   const [ invoiceDescription, setInvoiceDescription ] = useState()
   const [ specification, setSpecification ] = useState([])
@@ -20,7 +30,9 @@ const App = () => {
   const [ vatAmount, setVatAmount ] = useState(1.25)
   const [ vatPrice, setVatPrice ] = useState(0)
   const [ totalPrice, setTotalPrice ] = useState(0)
-  const [ invoiceDays ] = useState(moment().add(30, 'days').format('YYYY-MM-DD'))
+  const [ invoiceDays, setInvoiceDays ] = useState()
+  const [ companies, setCompanies ] = useState()
+  const [ useCompany, setUseCompany ] = useState()
 
   const editRow = (row, event) => {
     const editSpec = [...specification]
@@ -73,6 +85,44 @@ const App = () => {
     }
   }, [userId, invoiceNumber])
 
+  const saveOrUpdateCompany = () => {
+    saveNewCompany(yourRefName, yourRefCompany, yourRefInfo).then((data) => {
+      setSavedOrUpdatedCompany(data)
+    })
+  }
+
+  useEffect(() => {
+    if(savedOrUpdatedCompany.success !== null) {
+      setTimeout(() => {
+        setSavedOrUpdatedCompany({})
+      }, 10000)
+    }
+  }, [savedOrUpdatedCompany])
+
+  useEffect(() => {
+    if(!companies) {
+      fetchCompanies().then((data) => {
+        setCompanies(data.map(doc => doc.data()))
+      })
+    }
+    if(companies instanceof Object && useCompany) {
+      let useCompanyMatch = null
+      companies.forEach(company => {
+        if(company.name === useCompany) {
+          useCompanyMatch = company
+        }
+      })
+      if(useCompanyMatch) {
+        setYourRefCompany(useCompanyMatch.name)
+        setYourRefName(useCompanyMatch.refName)
+        setYourRefInfo(useCompanyMatch.address)
+        setUseCompany()
+      }
+    }
+  }, [companies, useCompany])
+
+  const {success = null, msg = ''} = savedOrUpdatedCompany
+
 	return (
     <AuthContext.Consumer>
       {value => {
@@ -80,23 +130,43 @@ const App = () => {
         setUserId(uid)
         return (
           <Fragment>
-            <div className="editor-wrapper">
-              {!uid && (
-                <div className="row">
-                  <form onSubmit={(e) => handleLoginSubmission(e)}>
-                    <input type="text" name="name" placeholder="Användarnamn" onChange={(e) => setEmail(e.target.value)}/>
-                    <input type="text" name="pass" placeholder="Lösenord" onChange={(e) => setPassword(e.target.value)}/>
-                    <button type="submit">Logga in</button>
-                  </form>
+            {/* Login */}
+            {!uid && (
+              <section className="editor-wrapper">
+                <div className="row margin-md">
+                  <div className="col col-7">
+                    <h2 className="margin-md">Logga in</h2>
+                    <form onSubmit={(e) => handleLoginSubmission(e)}>
+                      <label htmlFor="loginEmail">
+                        Email
+                        <input id="loginEmail" type="email" name="name" placeholder="Användarnamn" onChange={(e) => setEmail(e.target.value)}/>
+                      </label>
+                      <label htmlFor="loginPassword">
+                        Lösenord
+                        <input type="password" name="pass" placeholder="Lösenord" onChange={(e) => setPassword(e.target.value)}/>
+                      </label>
+                      <button type="submit">Logga in</button>
+                    </form>
+                  </div>
                 </div>
-              )}
-              <div className="row">
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <fieldset className="col col-2">
+              </section>
+            )}
+            <form onSubmit={(e) => e.preventDefault()}>
+              <section className="editor-wrapper">
+                {/* Credit invoice, Title, Invoicenr */}
+                <div className="row margin-md">
+                  <fieldset className="col col-3">
+                    <label htmlFor="creditInvoice">
+                      <input id="creditInvoice" type="checkbox" name="credit"
+                        value={isCreditInvoice}
+                        checked={isCreditInvoice}
+                        onChange={() => setIsCreditInvoice(!isCreditInvoice)}/>
+                        &nbsp;Kreditfaktura
+                    </label>
                     <label htmlFor="invoiceTitle">
                       Titel:
                       <input id="invoiceNr" type="text" name="invoiceTitle" placeholder="Faktura"
-                        value={invoiceTitle}
+                        value={isCreditInvoice ? 'Kreditfaktura' : invoiceTitle}
                         onChange={(e) => setInvoiceTitle(e.target.value)}/>
                     </label>
                     <label htmlFor="invoiceNumber">
@@ -106,13 +176,51 @@ const App = () => {
                         onChange={(e) => setInvoiceNumber(e.target.value)}/>
                     </label>
                     {uid && (
-                      <button type="button" onClick={() => saveInvoiceIncNr(invoiceNumber)}>Spara till db</button>
+                      <button type="button" onClick={() => saveInvoiceIncNr(invoiceNumber)}>Spara fakturanummer</button>
                     )}
+                  </fieldset>
+                </div>
+              </section>
+              <section className="editor-wrapper">
+                {uid && companies && (
+                  <div className="row margin-md">
+                    <div className="col col-7">
+                      <label>
+                          Hämta företagsinformation&nbsp;
+                          <select 
+                            name="useCompany"
+                            onChange={(e) => setUseCompany(e.target.value)}
+                            value={useCompany}>
+                            <option value="">-</option>
+                            {
+                              companies.map((company, i) => (
+                                <option key={`company-option-${i}`} value={company.name}>{company.name}</option>
+                              ))
+                            }
+                          </select>
+                        </label>
+                    </div>
+                  </div>
+                )}
+                <div className="row margin-md">
+                  <fieldset className="col col-7">
                     <label htmlFor="invoiceFor">
                       Er referens:
-                      <textarea id="invoiceFor" type="text" name="yourRef"
-                        value={yourRef}
-                        onChange={(e) => setYourRef(e.target.value)}/>
+                      <input id="invoiceForName" type="text" name="yourRef"
+                        value={yourRefName}
+                        onChange={(e) => setYourRefName(e.target.value)}/>
+                    </label>
+                    <label htmlFor="invoiceForCompany">
+                      Företag:
+                      <input id="invoiceForCompany" type="text" name="yourRefCompany"
+                        value={yourRefCompany}
+                        onChange={(e) => setYourRefCompany(e.target.value)}/>
+                    </label>
+                    <label htmlFor="invoiceForInfo">
+                      Adress och företagsinformation:
+                      <textarea id="invoiceForInfo" type="text" name="yourRefInfo"
+                        value={yourRefInfo}
+                        onChange={(e) => setYourRefInfo(e.target.value)}/>
                     </label>
                     <label htmlFor="invoiceFrom">
                       Vår referens:
@@ -120,40 +228,35 @@ const App = () => {
                         value={ourRef}
                         onChange={(e) => setOurRef(e.target.value)}/>
                     </label>
+                    <button type="button" onClick={() => saveOrUpdateCompany()}>
+                      Spara företagsinformation
+                    </button>
+                    {success !== null && (
+                      <p style={success ? {color: 'green'} : {color: 'red'}}>{msg}</p>
+                    )}
                   </fieldset>
-                  <fieldset className="col col-2">
-                    <label htmlFor="invoiceDescription">
-                      Beskrivning:
-                      <textarea id="invoiceDescription" placeholder="Detta är fakturan för arbeten..." name="invoiceDescription"
-                        value={invoiceDescription}
-                        onChange={(e) => setInvoiceDescription(e.target.value)}/>
-                    </label>
-                  </fieldset>
+                </div>
+              </section>
+              <section className="editor-wrapper">
+                <div className="row margin-md">
                   <div className="col col-7">
-                    <div>
-                      <label>
-                        Kreditfaktura:
-                        <input type="checkbox" name="credit"
-                          value={isCreditInvoice}
-                          checked={isCreditInvoice}
-                          onChange={() => setIsCreditInvoice(!isCreditInvoice)}/>
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        Moms&nbsp;
-                        <select 
-                          name="vatAmount"
-                          onChange={(e) => setVatAmount(e.target.value)}
-                          value={vatAmount}>
-                          <option value="1.25">25%</option>
-                          <option value="1.12">12%</option>
-                          <option value="1.06">6%</option>
-                          <option value="0">Faktura exkl moms</option>
-                        </select>
-                      </label>
-                    </div>
-                    <h2 className="margin-sm">Specifikationer:</h2>
+                    <label>
+                      Moms&nbsp;
+                      <select 
+                        name="vatAmount"
+                        onChange={(e) => setVatAmount(e.target.value)}
+                        value={vatAmount}>
+                        <option value="1.25">25%</option>
+                        <option value="1.12">12%</option>
+                        <option value="1.06">6%</option>
+                        <option value="0">Faktura exkl moms</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="row margin-md">
+                  <div className="col col-7">
+                    <h2 className="margin-sm">Utfört arbete</h2>
                     {
                       Object.keys(specification).map((spec) => (
                         <fieldset key={'spec-' + spec} className="row">
@@ -188,16 +291,51 @@ const App = () => {
                     <button onClick={() => addRow()}>Lägg till rad</button>
                     <button onClick={() => updateInvoice()}>Uppdatera pris</button>
                   </div>
-                </form>
-              </div>
-            </div>
+                </div>
+                <div className="row margin-md">
+                  <div className="col col-7">
+                    <label htmlFor="invoiceDescription">
+                      Extra rad för specification
+                      <textarea id="invoiceDescription" placeholder="Specifikation: Arbeten med.." name="invoiceDescription"
+                        value={invoiceDescription}
+                        onChange={(e) => setInvoiceDescription(e.target.value)}/>
+                    </label>
+                  </div>
+                </div>
+              </section>
+              <section className="editor-wrapper">
+                <div className="row margin-md">
+                  <div className="col col-7">
+                    <label htmlFor="invoiceDate">
+                      Dagens datum
+                      <input type="text" name="price"
+                        value={invoiceDate}
+                        onChange={(e) => setInvoiceDate(e.target.value)}/>
+                    </label>
+                    <label htmlFor="invoiceDate">
+                      Fakturadagar
+                      <select 
+                        name="invoiceDays"
+                        onChange={(e) => setInvoiceDays(e.target.value)}
+                        value={invoiceDays}>
+                        <option value="30">30 dagar</option>
+                        <option value="20">20 dagar</option>
+                        <option value="15">15 dagar</option>
+                        <option value="10">10 dagar</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </section>
+            </form>
             <div className="desktop-wrapper">
               <Header
-                invoiceTitle={invoiceTitle}
-                invoiceDescription={invoiceDescription}
+                invoiceTitle={isCreditInvoice ? 'Kreditfaktura' : invoiceTitle}
                 invoiceNumber={invoiceNumber}
                 invoiceDate={invoiceDate}
-                yourRef={yourRef}
+                yourRefName={yourRefName}
+                yourRefCompany={yourRefCompany}
+                yourRefInfo={yourRefInfo}
                 ourRef={ourRef}
               />
               <Work
@@ -206,7 +344,8 @@ const App = () => {
                 vatPrice={vatPrice}
                 totalPrice={totalPrice}
                 isCreditInvoice={isCreditInvoice}
-                invoiceDays={invoiceDays}
+                invoiceDays={moment(invoiceDate).add(parseInt(invoiceDays || 30), 'days').format('YYYY-MM-DD')}
+                invoiceDescription={invoiceDescription}
               />
               <Footer/>
             </div>
