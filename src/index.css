@@ -171,14 +171,7 @@ body {
 }
 
 @page {
-	/* Fallback sizes */
-	width: 21cm;
-	height: 29.7cm;
-	/* Used in browsers that can handle size attribute. */
-	size: A4 portrait;
-	background: #ffffff;
-	/* Some browsers print screen will ignore these margins. */
-	margin: 1.3cm 1.2cm 0.8cm 1.2cm;
+  size: auto;  margin: 0mm;
 }
 
 /* .desktop-wrapper - Used for desktop preview */
@@ -289,6 +282,9 @@ Print specific styles
 
 @media print {
 
+  body {
+    background-color: #FFFFFF;
+  }
 	body,
 	.desktop-wrapper {
 		margin: 0;
