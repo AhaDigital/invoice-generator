@@ -23,6 +23,7 @@ const App = () => {
   const [ yourRefName, setYourRefName ] = useState()
   const [ yourRefCompany, setYourRefCompany ] = useState()
   const [ yourRefInfo, setYourRefInfo ] = useState()
+  const [ yourRefEmail, setYourRefEmail ] = useState()
   const [ ourRef, setOurRef ] = useState()
   const [ invoiceDescription, setInvoiceDescription ] = useState()
   const [ specification, setSpecification ] = useState([])
@@ -116,6 +117,7 @@ const App = () => {
         setYourRefCompany(useCompanyMatch.name)
         setYourRefName(useCompanyMatch.refName)
         setYourRefInfo(useCompanyMatch.address)
+        setYourRefEmail(useCompanyMatch.email)
         setUseCompany()
       }
     }
@@ -235,6 +237,11 @@ const App = () => {
                       <p style={success ? {color: 'green'} : {color: 'red'}}>{msg}</p>
                     )}
                   </fieldset>
+                  {yourRefEmail && (
+                    <div className="col col-5">
+                      <h3>Skickas till {yourRefEmail}</h3>
+                    </div>
+                  )}
                 </div>
               </section>
               <section className="editor-wrapper">
