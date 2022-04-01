@@ -13,7 +13,7 @@ const Header = ({
   return (
     <header className="row margin-lg">
       <div className="col col-6 margin-md">
-        <img src={logo} className="logo" alt="FFMedia AB"/>
+        <img src={logo} className="logo" alt="FFMedia AB" />
       </div>
       <div className="col col-6">
         <h1 className="h1 margin-sm">{invoiceTitle}</h1>
@@ -31,9 +31,9 @@ const Header = ({
             <h3 className="h3">Er referens:</h3>
           </div>
           <div className="col col-8">
-            <p style={{whiteSpace: 'pre-line'}} className="margin-sm">{yourRefName}</p>
-            <p style={{whiteSpace: 'pre-line'}}>{yourRefCompany}</p>
-            <p style={{whiteSpace: 'pre-line'}}>{yourRefInfo}</p>
+            <p style={{ whiteSpace: 'pre-line' }} className="margin-sm">{yourRefName}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{yourRefCompany}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{yourRefInfo}</p>
           </div>
         </div>
         <div className="row margin-df">
@@ -50,8 +50,8 @@ const Header = ({
           </div>
           <div className="col col-8">
             <p><span>Aha Digital AB</span> c/o Tatsumi Suzuki</p>
-            <p>Bergsunds Strand 13, 7tr</p>
-            <p>117 38 Stockholm</p>
+            <p>Wollmar Yxkullsgatan 2b 2tr</p>
+            <p>118 50 Stockholm</p>
           </div>
         </div>
       </div>
