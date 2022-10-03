@@ -49,9 +49,9 @@ const Header = ({
             <h4 className="h3 margin-sm">Adress:</h4>
           </div>
           <div className="col col-8">
-            <p><span>Aha Digital AB</span> c/o Tatsumi Suzuki</p>
-            <p>Wollmar Yxkullsgatan 2b 2tr</p>
-            <p>118 50 Stockholm</p>
+            <p><span>Aha Digital AB</span></p>
+            <p>S:t Göransgatan 82</p>
+            <p>112 38 Stockholm</p>
           </div>
         </div>
       </div>
