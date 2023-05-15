@@ -246,7 +246,7 @@ tfoot td:nth-of-type(2) {
 }
 
 thead {
-	background: linear-gradient(90deg, rgba(31, 105, 255, 0.25) 0.73%, rgba(255, 77, 163, 0.25) 31.75%, rgba(255, 238, 102, 0.25) 100%);
+	background: linear-gradient(90deg, rgb(255 51 248 / 76%) 0.73%, rgb(255 238 102) 100%);
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }

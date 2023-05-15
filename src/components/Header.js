@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from '../logo.svg';
 
 const Header = ({
   invoiceTitle,
@@ -13,10 +12,10 @@ const Header = ({
   return (
     <header className="row margin-lg">
       <div className="col col-6 margin-md">
-        <img src={logo} className="logo" alt="FFMedia AB" />
+        <h3>Hyresavi</h3>
+        <h4>S:t Göransgatan 82</h4>
       </div>
       <div className="col col-6">
-        <h1 className="h1 margin-sm">{invoiceTitle}</h1>
         <h2 className="h2 margin-df">Fakturanummer: {invoiceNumber}</h2>
         <div className="row margin-df">
           <div className="col col-4">
@@ -31,9 +30,9 @@ const Header = ({
             <h3 className="h3">Er referens:</h3>
           </div>
           <div className="col col-8">
-            <p style={{ whiteSpace: 'pre-line' }} className="margin-sm">{yourRefName}</p>
-            <p style={{ whiteSpace: 'pre-line' }}>{yourRefCompany}</p>
-            <p style={{ whiteSpace: 'pre-line' }}>{yourRefInfo}</p>
+            <p style={{ whiteSpace: 'pre-line' }} className="margin-sm">{'Tatsumi Suzuki'}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{'Aha Digital AB'}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{'S:t Göransgatan 82, 112 38 Stockholm'}</p>
           </div>
         </div>
         <div className="row margin-df">
@@ -41,7 +40,7 @@ const Header = ({
             <h3 className="h3">Vår referens:</h3>
           </div>
           <div className="col col-8">
-            <p>{ourRef}</p>
+            <p>{'Cecilia Fredriksson'}</p>
           </div>
         </div>
         <div className="row">
@@ -49,9 +48,8 @@ const Header = ({
             <h4 className="h3 margin-sm">Adress:</h4>
           </div>
           <div className="col col-8">
-            <p><span>Aha Digital AB</span></p>
-            <p>S:t Göransgatan 82</p>
-            <p>112 38 Stockholm</p>
+            <p>Wollmar yxkullsgatan 2b</p>
+            <p>118 50 Stockholm</p>
           </div>
         </div>
       </div>

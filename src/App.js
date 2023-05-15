@@ -28,7 +28,7 @@ const App = () => {
   const [ invoiceDescription, setInvoiceDescription ] = useState()
   const [ specification, setSpecification ] = useState([])
   const [ isCreditInvoice, setIsCreditInvoice ] = useState(false)
-  const [ vatAmount, setVatAmount ] = useState(1.25)
+  const [ vatAmount, setVatAmount ] = useState(0)
   const [ vatPrice, setVatPrice ] = useState(0)
   const [ totalPrice, setTotalPrice ] = useState(0)
   const [ invoiceDays, setInvoiceDays ] = useState()
@@ -277,7 +277,7 @@ const App = () => {
                           </div>
                           <div className="col col-3">
                             <label>
-                              Timmar
+                              Antal
                               <input type="text" name="hours"
                                 value={specification[spec].hours}
                                 onChange={(e) => editRow(spec, e.target)}/>

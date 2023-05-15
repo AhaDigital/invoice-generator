@@ -16,9 +16,9 @@ const Work = ({
         <thead>
           <tr>
             <td>Specifikation</td>
-            <td>Timmar</td>
-            <td>Timpris</td>
-            <td>Total exkl. moms</td>
+            <td>Antal</td>
+            <td>Hyra</td>
+            <td>Totalt pris</td>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@ const Work = ({
 
               <tr key={'spec-'+spec}>
                 <td>{specification[spec].spec}</td>
-                <td>{specification[spec].hours}h</td>
+                <td>1st</td>
                 <td>{specification[spec].price}kr</td>
                 <td>{isCreditInvoice ? '-' + parseFloat(specification[spec].price) * parseFloat(specification[spec].hours) : parseFloat(specification[spec].price) * parseFloat(specification[spec].hours)}kr</td>
               </tr>
@@ -73,9 +73,9 @@ const Work = ({
         </tfoot>
       </table>
       <div className="col col-4 margin-sm">
-        <p className="h3">Till bankgirokonto:</p>
-        <p className="margin-df">5002-3159</p>
-        <p className="font-xs">Iban-nummer: SE1050000000052311100114</p>
+        <p className="h3">Till kontonummer:</p>
+        <p className="margin-df">5356 00 774 51</p>
+        <p className="font-xs">Iban-nummer: SE53 5000 0000 0535 6007 7451</p>
         <p className="font-xs">SEB Bic-kod: ESSESESS</p>
       </div>
       <div className="col col-3 margin-sm">
