@@ -326,7 +326,7 @@ const App = () => {
                         onChange={(e) => setInvoiceDays(e.target.value)}
                         value={invoiceDays}>
                         <option value="30">30 dagar</option>
-                        <option value="20">20 dagar</option>
+                        <option value="25">25 dagar</option>
                         <option value="15">15 dagar</option>
                         <option value="10">10 dagar</option>
                       </select>

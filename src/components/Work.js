@@ -17,7 +17,7 @@ const Work = ({
           <tr>
             <td>Specifikation</td>
             <td>Antal</td>
-            <td>Hyra</td>
+            <td>Á pris</td>
             <td>Totalt pris</td>
           </tr>
         </thead>
@@ -27,7 +27,7 @@ const Work = ({
 
               <tr key={'spec-'+spec}>
                 <td>{specification[spec].spec}</td>
-                <td>1st</td>
+                <td>{specification[spec].hours}</td>
                 <td>{specification[spec].price}kr</td>
                 <td>{isCreditInvoice ? '-' + parseFloat(specification[spec].price) * parseFloat(specification[spec].hours) : parseFloat(specification[spec].price) * parseFloat(specification[spec].hours)}kr</td>
               </tr>
