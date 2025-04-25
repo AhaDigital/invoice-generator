@@ -30,7 +30,7 @@ const Header = ({
             <h3 className="h3">Er referens:</h3>
           </div>
           <div className="col col-8">
-            <p style={{ whiteSpace: 'pre-line' }} className="margin-sm">{'Cecilia Fredriksson'}</p>
+            <p style={{ whiteSpace: 'pre-line' }} className="margin-sm">{'Cecilia Suzuki'}</p>
             <p style={{ whiteSpace: 'pre-line' }}>{'Smallworld Nordic Sweden AB'}</p>
             <p style={{ whiteSpace: 'pre-line' }}>{'S:t Göransgatan 82, 112 38 Stockholm'}</p>
           </div>
@@ -40,7 +40,7 @@ const Header = ({
             <h3 className="h3">Vår referens:</h3>
           </div>
           <div className="col col-8">
-            <p>{'Cecilia Fredriksson/Tatsumi Suzuki'}</p>
+            <p>{'Cecilia Suzuki/Tatsumi Suzuki'}</p>
           </div>
         </div>
         <div className="row">
