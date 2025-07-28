@@ -12,7 +12,7 @@ const Header = ({
   return (
     <header className="row margin-lg">
       <div className="col col-6 margin-md">
-        <h3>Hyresavi</h3>
+        <h3>Faktura bokföring</h3>
         <h4>Aha digital AB</h4>
       </div>
       <div className="col col-6">
