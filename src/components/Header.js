@@ -40,7 +40,7 @@ const Header = ({
             <h3 className="h3">Vår referens:</h3>
           </div>
           <div className="col col-8">
-            <p>{'Cecilia Fredriksson'}</p>
+            <p>{'Cecilia Suzuki'}</p>
           </div>
         </div>
         <div className="row">
